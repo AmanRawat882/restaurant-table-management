@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	
+        <link rel="stylesheet" href="style.css">
+    <title>Restaurant</title>
+</head>
+
+<body> 
+    <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h3 class="modal-title" style="display: inline;" id="modalHeading"></h3>
+              <button type="button"  class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div id="table-contents" class="modal-body">
+              <table class="table modalTable"></table>
+
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+             </div>
+          </div>
+        </div>
+      </div>
+    <div class="container">
+        <div class="row">
+
+            <div class="col-4 col-md-4">
+                <header>
+                    <h3 class="tables">Tables</h3>
+                </header>
+                <input type="search" id="tableSearch" onkeyup="searchTable()" placeholder="Search table by table name..."/>
+                <div id="tableList">
+                </div>
+            </div>
+            <!-- <div class="col-md-1 vertical-line"></div> -->
+            <div class="col-12 col-md-8">
+                <header>
+
+                    <h3>Menu</h3>
+                </header>
+                <input type="search" name="menuSearch" id="menuSearch" onkeyup="searchMenu()" id="menuSearch" placeholder="Search menu by name or category..."/>
+                <div id="menuList"></div>
+            </div>
+    </div>
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous">
+    </script>
+    <script src="script.js"></script>
+</body>
+
+</html>

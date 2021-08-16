@@ -1,0 +1,48 @@
+*{
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+#tableSearch,#menuSearch {
+    width: 70%;
+    height: 40px;
+    margin-top: 5px;
+    text-align: justify;
+    text-indent: 5px;
+    font-size: 12.6pt;
+    border-radius: 5px;
+    border: solid 1.5px#242B2E;
+    box-shadow: 0 0 5pt 1.5pt #242B2E;
+    outline-width: 0px;
+ 
+  }
+
+  .vertical-line{
+      border-left: 3px solid black;
+      height: 750px;
+  }
+  #tableList, #menuList{
+	overflow-y: scroll;
+    max-height: 45em;
+  }
+  #table-0,#menu-0{
+      margin-top: 30px;
+  }
+ 
+ .box{
+     width: 80%;
+     margin: 10px;
+     padding: 5px;
+     border: 2px solid lightseagreen;
+      border-radius: 5px;
+    box-shadow: 0 0 2pt 1pt lightseagreen;
+    outline-width: 0px;
+ }
+ .table{
+    margin-bottom: 30px;
+}
+
+
+.tableInput{
+    box-shadow: none;
+}
