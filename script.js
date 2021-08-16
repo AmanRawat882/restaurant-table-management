@@ -122,6 +122,8 @@ var foodItems = [
   },
 ];
 
+
+
 function loadTable() {
   var menuList = document.getElementById("menuList");
 	menuList.innerHTML="";
@@ -148,7 +150,6 @@ tableList.innerHTML="";
     var id = "table-" + i;
     var division = document.createElement("div");
     division.setAttribute("id", id);
-    // ondragenter="onDragEnter(event)" ondrop="drop(event)" ondragleave="onDragLeave(event)"
     division.setAttribute("class", "table box");
     division.setAttribute("ondragover", "allowDrop(event)");
     division.setAttribute("ondrop", "onDrop(event)");
@@ -267,6 +268,7 @@ function openModal(event) {
   var modalBody = document.getElementsByClassName("modalTable")[0];
   modalBody.innerHTML = "";
   var id = event;
+  document.getElementById(id).style.backgroundColor="yellow";
   var tableId = id.slice(id.indexOf("-") + 1, id.length);
   console.log("In openModal "+id+"  table id  "+tableId);
   var currentTable = document.getElementById(id);
@@ -290,33 +292,46 @@ function openModal(event) {
     modalBody.appendChild(thead);
 
     var tbody = document.createElement("tbody");
-
+    // onkeyup=\"updateQuantity("+tableId+","+i+")
     for (let i = 0; i < noOfOrders; i++) {
       tr = document.createElement("tr");
+      tr.setAttribute("id","tr-"+i);
       tr.innerHTML =
-        "<td>" +
-        (i + 1) +
-        "</td><td>" +
-        table[tableId].items[i] +
-        "</td><td>" +
-        table[tableId].price[i] +
-        '</td><td><input type="number" class="tableInput" value="' +
+        "<td>" +(i + 1) +"</td><td>" + table[tableId].items[i] + "</td><td>" +table[tableId].price[i] +
+        "</td><td><input type=\"number\" class=\"tableInput\" onkeyup=\"updateQuantity("+tableId+","+i+")\" value=" +
         table[tableId].quantity[i] +
-        '" min="1"/></td><td class="fa fa-trash" onclick="deleteItem(' +
-        tableId +
-        "," +
-        i +
-        ')"></td>';
+        " min=\"1\"/> </td><td class=\"fa fa-trash\" onclick=\"deleteItem("+tableId+","+i+")\"></td>";
+        // " min=\"1\"/> </td><td class=\"fa fa-trash\" onclick=\"deleteItem(" +tableId +"," + i +")></td>";
       tbody.appendChild(tr);
     }
+
     modalBody.appendChild(tbody);
+
+    
+    var tfoot=document.createElement("tfoot");
+    tr=document.createElement("tr");
+    tr.innerHTML="<th colspan=\"2\">Total:</th><th class=\"finalPrice\">"+table[tableId].bill+"</th>";
+    tfoot.appendChild(tr);
+    modalBody.appendChild(tfoot);
+    
+      var footer=document.getElementsByClassName("modal-footer")[0];
+      footer.innerHTML="<button type=\"button\" class=\"btn btn-secondary\" onclick=\"generateBill("+tableId+")\" data-dismiss=\"modal\">Generate Bill</button>";
+     
+    
+
+    
+
   } else if (noOfOrders == 0) {
     modalBody.innerHTML = "<h4>No items yet..</h4>";
+    var footer=document.getElementsByClassName("modal-footer")[0];
+    footer.innerHTML="<button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">Close</button>";
+    
   }
 }
 
 function beforeOpenModal(event) {
   var id = event.target.id;
+  
   console.log("Click "+id);
   if (id != "") openModal(event.target.id);
 }
@@ -327,19 +342,76 @@ for (let i = 0; i <=table.length; i++) {
     [i].addEventListener("click", beforeOpenModal);
 }
 
-function deleteItem(id, tableId) {
+function deleteItem(tableId,id) {
 	// tableId--;
 	// id--;
 
-	console.log(table[tableId-1]);
-  console.log("Delete "+id+1 + " " + tableId-1);
-  table[tableId-1].bill=Number(table[tableId-1].bill)-(Number(table[tableId-1].price[id+1])*Number(table[tableId-1].quantity[id+1]));
-  table[tableId-1].totalItems=Number(table[tableId-1].totalItems)-Number(table[tableId-1].quantity[id+1]);
-  table[tableId-1].items.splice(id+1,1);
-  table[tableId-1].quantity.splice(id+1,1);
-  table[tableId-1].price.splice(id+1,1);
-  console.log("In delete table-"+(tableId-1));
-  openModal("table-"+(tableId-1))
-  loadTable();
+  id=Number(id);
+  tableId=Number(tableId);
+
+console.log(id+"  "+tableId);
+
+
+	// console.log(table[tableId-1]);
+  // console.log("Delete "+id+1 + " " + tableId-1);
+  table[tableId].bill=Number(table[tableId].bill)-(Number(table[tableId].price[id])*Number(table[tableId].quantity[id]));
+  table[tableId].totalItems=Number(table[tableId].totalItems)-Number(table[tableId].quantity[id]);
+
+
+
+  console.log(table[tableId].bill+" "+table[tableId].totalItems);
+  var currentTable=document.getElementById("table-"+tableId);
+  
+  currentTable.getElementsByClassName("amount")[0].innerText=table[tableId].bill;
+  currentTable.getElementsByClassName("items")[0].innerText=table[tableId].totalItems;
+
+  table[tableId].items.splice(id,1);
+  table[tableId].quantity.splice(id,1);
+  table[tableId].price.splice(id,1);
+  console.log("In delete table-"+(tableId));
+  // console.log(table);
+  openModal("table-"+(tableId))
+  // loadTable();
 	
+}
+
+function updateQuantity(tableId, id){
+  var tr=document.getElementById("tr-"+id);
+  var currentQuantityInput=tr.getElementsByTagName("input")[0].value;
+  table[tableId].quantity[id]=currentQuantityInput;
+  var finalPrice=0;
+  var totalQuantity=0;
+  for(var i=0;i<table[tableId].items.length;i++){
+    totalQuantity+=Number(table[tableId].quantity[i]);
+    finalPrice+=table[tableId].price[i]*table[tableId].quantity[i];
+  }
+  document.getElementsByClassName("finalPrice")[0].innerHTML=finalPrice;
+  table[tableId].bill=finalPrice;
+  var currentTable=document.getElementById("table-"+tableId);
+    currentTable.getElementsByClassName("amount")[0].innerHTML=finalPrice;
+    currentTable.getElementsByClassName("items")[0].innerHTML=totalQuantity;
+  console.log(currentQuantityInput);
+
+}
+
+
+function generateBill(tableId){
+  var currentTable=document.getElementById("table-"+tableId);
+  var finalPrice=table[tableId].bill;
+  alert("Please pay "+finalPrice);
+  table[tableId].totalItems=0;
+  table[tableId].bill=0;
+  table[tableId].items=[];
+  table[tableId].price=[];
+  table[tableId].price=[];
+  
+  currentTable.getElementsByClassName("amount")[0].innerHTML=0;
+
+  currentTable.getElementsByClassName("items")[0].innerHTML=0;
+  currentTable.style.backgroundColor="white";
+
+}
+for(var i=0;i<table.length;i++){
+  document.getElementById("table-"+i).style.backgroundColor="white";
+ 
 }
